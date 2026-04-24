@@ -1,11 +1,14 @@
 package com.pedroheing.shoppingcart.user;
 
+import com.pedroheing.shoppingcart.user.dto.CreateUserInput;
 import com.pedroheing.shoppingcart.user.dto.CreateUserRequest;
+import com.pedroheing.shoppingcart.user.dto.UpdateUserInput;
 import com.pedroheing.shoppingcart.user.dto.UpdateUserRequest;
 import com.pedroheing.shoppingcart.user.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,8 +19,9 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserDTO> create(@RequestBody CreateUserRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(request));
+    public ResponseEntity<UserDTO> create(@Valid @RequestBody CreateUserRequest request) {
+        var input = new CreateUserInput(request.name(), request.email());
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(input));
     }
 
     @GetMapping("/{id}")
@@ -26,8 +30,9 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> update(@PathVariable String id, @RequestBody UpdateUserRequest request) {
-        return ResponseEntity.ok(userService.update(id, request));
+    public ResponseEntity<UserDTO> update(@PathVariable String id, @Valid @RequestBody UpdateUserRequest request) {
+        var input = new UpdateUserInput(request.name(), request.email());
+        return ResponseEntity.ok(userService.update(id, input));
     }
 
     @DeleteMapping("/{id}")

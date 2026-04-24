@@ -1,8 +1,8 @@
 package com.pedroheing.shoppingcart.user;
 
-import com.pedroheing.shoppingcart.common.NotFoundException;
-import com.pedroheing.shoppingcart.user.dto.CreateUserRequest;
-import com.pedroheing.shoppingcart.user.dto.UpdateUserRequest;
+import com.pedroheing.shoppingcart.common.exception.NotFoundException;
+import com.pedroheing.shoppingcart.user.dto.CreateUserInput;
+import com.pedroheing.shoppingcart.user.dto.UpdateUserInput;
 import com.pedroheing.shoppingcart.user.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,10 +15,10 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public UserDTO create(CreateUserRequest request) {
+    public UserDTO create(CreateUserInput input) {
         User user = User.builder()
-                .name(request.name())
-                .email(request.email())
+                .name(input.name())
+                .email(input.email())
                 .build();
         return toDTO(userRepository.save(user));
     }
@@ -30,11 +30,11 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO update(String id, UpdateUserRequest request) {
+    public UserDTO update(String id, UpdateUserInput input) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User not found: " + id));
-        user.setName(request.name());
-        user.setEmail(request.email());
+        user.setName(input.name());
+        user.setEmail(input.email());
         return toDTO(userRepository.save(user));
     }
 

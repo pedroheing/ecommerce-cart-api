@@ -1,3 +1,9 @@
 package com.pedroheing.shoppingcart.user.dto;
 
-public record CreateUserRequest(String name, String email) {}
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
+public record CreateUserRequest(
+        @NotBlank String name,
+        @NotBlank @Email String email
+) {}
