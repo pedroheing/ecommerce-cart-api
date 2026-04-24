@@ -1,4 +1,4 @@
-package com.pedroheing.shoppingcart.common;
+package com.pedroheing.shoppingcart.common.exception;
 
 public class NotFoundException extends RuntimeException {
     public NotFoundException(String message) {
