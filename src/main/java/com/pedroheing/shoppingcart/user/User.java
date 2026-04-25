@@ -3,8 +3,6 @@ package com.pedroheing.shoppingcart.user;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
-
 @Entity
 @Table(name = "users")
 @Getter
@@ -24,7 +22,6 @@ public class User {
 
     @Column(nullable = false, unique = true)
     private String token;
-
 
     public void setName(String name) {
         if (name == null || name.isEmpty()) {

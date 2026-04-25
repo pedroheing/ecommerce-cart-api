@@ -13,24 +13,26 @@ public class RedisProductService implements  ProductService {
 
     private final ProductService productService;
     private final RedisTemplate<String, Object> redisTemplate;
-    private static final String CACHE_KEY_PREFIX = "product:";
+    private final ProductCacheProperties cacheProperties;
 
     public RedisProductService(
             @Qualifier("databaseProductService") ProductService productService,
-            RedisTemplate<String, Object> redisTemplate
+            RedisTemplate<String, Object> redisTemplate,
+            ProductCacheProperties cacheProperties
     ) {
         this.productService = productService;
         this.redisTemplate = redisTemplate;
+        this.cacheProperties = cacheProperties;
     }
 
     public String buildKey(String productId) {
-        return CACHE_KEY_PREFIX + productId;
+        return cacheProperties.keyPrefix()  + productId;
     }
 
     @Override
     public Product create(CreateProductInput input) {
         Product newProduct = this.productService.create(input);
-        redisTemplate.opsForValue().set(this.buildKey(newProduct.getId()), newProduct, Duration.ofHours(1));
+        redisTemplate.opsForValue().set(this.buildKey(newProduct.getId()), newProduct, cacheProperties.ttl());
         return newProduct;
     }
 
@@ -41,14 +43,14 @@ public class RedisProductService implements  ProductService {
             return product;
         }
         product = this.productService.findById(id);
-        redisTemplate.opsForValue().set(this.buildKey(id), product, Duration.ofHours(1));
+        redisTemplate.opsForValue().set(this.buildKey(id), product, cacheProperties.ttl());
         return product;
     }
 
     @Override
     public Product update(String id, UpdateProductInput input) {
         Product newProduct = this.productService.update(id, input);
-        redisTemplate.opsForValue().set(this.buildKey(newProduct.getId()), newProduct, Duration.ofHours(1));
+        redisTemplate.opsForValue().set(this.buildKey(newProduct.getId()), newProduct, cacheProperties.ttl());
         return newProduct;
     }
 
