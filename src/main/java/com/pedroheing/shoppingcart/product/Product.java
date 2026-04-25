@@ -1,18 +1,15 @@
 package com.pedroheing.shoppingcart.product;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "products")
-@Data
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 public class Product {
     @Id
@@ -24,4 +21,18 @@ public class Product {
 
     @Column(nullable = false, precision = 19, scale = 4)
     private BigDecimal price;
+
+    public void setName(String name) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be empty");
+        }
+        this.name = name;
+    }
+
+    public void setPrice(BigDecimal price) {
+        if (price == null || price.signum() < 0) {
+            throw new IllegalArgumentException("price must be non-negative");
+        }
+        this.price = price;
+    }
 }
