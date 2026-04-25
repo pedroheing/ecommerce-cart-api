@@ -3,10 +3,13 @@ package com.pedroheing.shoppingcart.user;
 import com.pedroheing.shoppingcart.common.exception.NotFoundException;
 import com.pedroheing.shoppingcart.user.dto.CreateUserInput;
 import com.pedroheing.shoppingcart.user.dto.UpdateUserInput;
-import com.pedroheing.shoppingcart.user.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.security.SecureRandom;
+import java.util.Base64;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -15,27 +18,31 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public UserDTO create(CreateUserInput input) {
+    public User create(CreateUserInput input) {
         User user = User.builder()
                 .name(input.name())
                 .email(input.email())
+                .token(this.generateToken())
                 .build();
-        return toDTO(userRepository.save(user));
+        return userRepository.save(user);
     }
 
-    public UserDTO findById(String id) {
+    public User findById(String id) {
         return userRepository.findById(id)
-                .map(this::toDTO)
                 .orElseThrow(() -> new NotFoundException("User not found: " + id));
     }
 
+    public Optional<User> findByToken(String token) {
+         return userRepository.findByToken(token);
+    }
+
     @Transactional
-    public UserDTO update(String id, UpdateUserInput input) {
+    public User update(String id, UpdateUserInput input) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User not found: " + id));
         user.setName(input.name());
         user.setEmail(input.email());
-        return toDTO(userRepository.save(user));
+        return userRepository.save(user);
     }
 
     @Transactional
@@ -46,7 +53,9 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    private UserDTO toDTO(User user) {
-        return new UserDTO(user.getId(), user.getName(), user.getEmail());
+    public String generateToken() {
+        byte[] bytes = new byte[32];
+        new SecureRandom().nextBytes(bytes);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
     }
 }
