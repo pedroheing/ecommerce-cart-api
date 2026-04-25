@@ -2,4 +2,8 @@ package com.pedroheing.shoppingcart.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, String> { }
+import java.util.Optional;
+
+public interface UserRepository extends JpaRepository<User, String> {
+    Optional<User> findByToken(String token);
+}
