@@ -17,9 +17,21 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
-aws:
-  dynamodb:
+shoppingcart:
+  product:
+    cache:
+      key-prefix: "product:"
+      ttl: 1h
+  cart:
+    dynamo:
+      table-name: shopping_cart
+      batch-size: 25
+  auth:
+    token:
+      ttl: 24h
+  dynamo:
     endpoint: http://localhost:4566
     region: us-east-1
     access-key: test
     secret-key: test
+

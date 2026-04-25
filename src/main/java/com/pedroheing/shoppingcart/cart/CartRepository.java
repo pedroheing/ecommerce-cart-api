@@ -1,6 +1,5 @@
 package com.pedroheing.shoppingcart.cart;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.*;
@@ -11,16 +10,20 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-@RequiredArgsConstructor
 public class CartRepository {
     private final DynamoDbClient dynamoDbClient;
-    private final String tableName = "cart";
+    private final CartDynamoProperties properties;
+
+    public CartRepository(DynamoDbClient dynamoDbClient, CartDynamoProperties properties) {
+        this.dynamoDbClient = dynamoDbClient;
+        this.properties = properties;
+    }
 
     public void putItem(String userId, CartItem item) {
         var pk = this.buildPkKey(userId);
         var sk = this.buildSkKey(item.productId());
         var updateRequest = UpdateItemRequest.builder()
-                .tableName(this.tableName)
+                .tableName(this.properties.tableName())
                 .key(Map.of(
                 "PK", AttributeValue.fromS(pk),
                 "SK", AttributeValue.fromS(sk)
@@ -40,7 +43,7 @@ public class CartRepository {
         var pk = this.buildPkKey(userId);
         var sk = this.buildSkKey(productId);
         var deleteRequest = DeleteItemRequest.builder()
-                .tableName(this.tableName)
+                .tableName(this.properties.tableName())
                 .key(Map.of(
                 "PK", AttributeValue.fromS(pk),
                 "SK", AttributeValue.fromS(sk)
@@ -52,7 +55,7 @@ public class CartRepository {
     public List<CartItem> listItems(String userId) {
         var pk = this.buildPkKey(userId);
         var queryRequest = QueryRequest.builder()
-                .tableName(this.tableName)
+                .tableName(this.properties.tableName())
                 .keyConditionExpression("PK = :PK")
                 .expressionAttributeValues(Map.of(":PK", AttributeValue.fromS(pk)))
                 .build();
@@ -69,7 +72,7 @@ public class CartRepository {
         List<Map<String, AttributeValue>> itemsToDelete = new ArrayList<>();
         do {
             var request = QueryRequest.builder()
-                    .tableName(tableName)
+                    .tableName(this.properties.tableName())
                     .keyConditionExpression("PK = :PK")
                     .expressionAttributeValues(Map.of(":PK", AttributeValue.fromS(pk)))
                     .projectionExpression("PK, SK")
@@ -88,12 +91,12 @@ public class CartRepository {
             deleteRequests.add(WriteRequest.builder().deleteRequest(deleteRequest).build());
         }
 
-        int dynamoBatchLimit = 25;
+        int dynamoBatchLimit = this.properties.batchSize();
         for (int start = 0; start < deleteRequests.size(); start += dynamoBatchLimit) {
             var end = Math.min(start + dynamoBatchLimit, deleteRequests.size());
             var batch = deleteRequests.subList(start, end);
             var batchRequest = BatchWriteItemRequest.builder()
-                    .requestItems(Map.of(tableName, batch))
+                    .requestItems(Map.of(this.properties.tableName(), batch))
                     .build();
             // batchWriteItem may return UnprocessedItems
             // a production implementation would retry, but it is out of scope for this project

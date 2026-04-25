@@ -13,25 +13,13 @@ import java.net.URI;
 @Configuration
 public class DynamoConfig {
 
-    @Value("${aws.dynamodb.endpoint}")
-    private String endpoint;
-
-    @Value("${aws.dynamodb.region}")
-    private String region;
-
-    @Value("${aws.dynamodb.access-key}")
-    private String accessKey;
-
-    @Value("${aws.dynamodb.secret-key}")
-    private String secretKey;
-
     @Bean
-    public DynamoDbClient dynamoDbClient() {
+    public DynamoDbClient dynamoDbClient(DynamoProperties properties) {
         return DynamoDbClient.builder()
-                .endpointOverride(URI.create(endpoint))
-                .region(Region.of(region))
+                .endpointOverride(URI.create(properties.endpoint()))
+                .region(Region.of(properties.region()))
                 .credentialsProvider(StaticCredentialsProvider.create(
-                        AwsBasicCredentials.create(accessKey, secretKey)
+                        AwsBasicCredentials.create(properties.accessKey(), properties.secretKey())
                 ))
                 .build();
     }
