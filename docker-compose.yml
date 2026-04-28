@@ -18,7 +18,7 @@ services:
       - "4566:4566"
     volumes:
       - localstack_data:/var/lib/localstack
-      -
+
   redis:
     image: redis:8
     restart: always
