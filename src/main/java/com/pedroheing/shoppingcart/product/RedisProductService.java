@@ -7,9 +7,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.UUID;
 
 @Service("cachedProductService")
-public class RedisProductService implements  ProductService {
+public class RedisProductService implements ProductService {
 
     private final ProductService productService;
     private final RedisTemplate<String, Object> redisTemplate;
@@ -29,14 +30,12 @@ public class RedisProductService implements  ProductService {
         return cacheProperties.keyPrefix()  + productId;
     }
 
-    @Override
     public Product create(CreateProductInput input) {
         Product newProduct = this.productService.create(input);
         redisTemplate.opsForValue().set(this.buildKey(newProduct.getId()), newProduct, cacheProperties.ttl());
         return newProduct;
     }
 
-    @Override
     public Product findById(String id) {
         Product product = (Product) redisTemplate.opsForValue().get(this.buildKey(id));
         if (product != null) {
@@ -47,16 +46,18 @@ public class RedisProductService implements  ProductService {
         return product;
     }
 
-    @Override
     public Product update(String id, UpdateProductInput input) {
         Product newProduct = this.productService.update(id, input);
         redisTemplate.opsForValue().set(this.buildKey(newProduct.getId()), newProduct, cacheProperties.ttl());
         return newProduct;
     }
 
-    @Override
     public void delete(String id) {
         this.productService.delete(id);
         redisTemplate.delete(this.buildKey(id));
+    }
+
+    public void decrementStock(String productId, int amount) {
+        productService.decrementStock(productId, amount);
     }
 }

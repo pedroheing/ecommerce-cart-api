@@ -1,7 +1,19 @@
 package com.pedroheing.shoppingcart.common.exception;
 
-public class NotFoundException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class NotFoundException extends DomainException {
     public NotFoundException(String message) {
         super(message);
+    }
+
+    @Override
+    public HttpStatus status() {
+        return HttpStatus.NOT_FOUND;
+    }
+
+    @Override
+    public String errorCode() {
+        return "NOT_FOUND";
     }
 }

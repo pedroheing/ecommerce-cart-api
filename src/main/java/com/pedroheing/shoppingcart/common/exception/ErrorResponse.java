@@ -1,3 +1,9 @@
 package com.pedroheing.shoppingcart.common.exception;
 
-public record ErrorResponse(int status, String message) {}
+import java.util.Map;
+
+public record ErrorResponse(
+        String error,
+        String message,
+        Map<String, Object> details
+) {}

@@ -14,11 +14,23 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFound(NotFoundException ex) {
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage()));
+    @ExceptionHandler(DomainException.class)
+
+    public ResponseEntity<ErrorResponse> handleDomain(DomainException e) {
+        return ResponseEntity.status(e.status()).body(new ErrorResponse(
+                e.errorCode(),
+                e.getMessage(),
+                e.details()
+        ));
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleBadRequest(IllegalArgumentException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(
+                "BAD_REQUEST",
+                e.getMessage(),
+                null
+        ));
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -29,11 +41,11 @@ public class GlobalExceptionHandler {
                     .collect(Collectors.joining("."));
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), field + ": " + invalidFormatEx.getOriginalMessage()));
+                    .body(new ErrorResponse("BAD_REQUEST", field + ": " + invalidFormatEx.getOriginalMessage(), null));
         }
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Invalid request body"));
+                .body(new ErrorResponse("BAD_REQUEST", "Invalid request body", null));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -43,6 +55,6 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.joining(", "));
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), message));
+                .body(new ErrorResponse("BAD_REQUEST", message, null));
     }
 }
