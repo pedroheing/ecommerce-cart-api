@@ -48,11 +48,9 @@ public class Product {
         this.price = price;
     }
 
-    public void restock(int amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("restock amount must be positive");
-        }
-        this.stock += amount;
+    public void changeStock(int amount) {
+        validateStock(amount);
+        this.stock = amount;
     }
 
     private static void validateName(String name) {
