@@ -15,16 +15,16 @@ import org.springframework.stereotype.Service;
 public class CheckoutService {
 
     private final CartService cartService;
-    private final ProductService databaseProductService;
+    private final ProductService productService;
     private final OrderService orderService;
 
     public CheckoutService(
             CartService cartService,
-            @Qualifier("writeThroughProductService") ProductService databaseProductService,
+            @Qualifier("writeThroughProductService") ProductService productService,
             OrderService orderService
     ) {
         this.cartService = cartService;
-        this.databaseProductService = databaseProductService;
+        this.productService = productService;
         this.orderService = orderService;
     }
 
@@ -34,12 +34,12 @@ public class CheckoutService {
         if (cartItems.isEmpty()) throw new EmptyCartException(userId);
 
         for (var item : cartItems) {
-            var product = databaseProductService.findById(item.productId());
+            var product = productService.findById(item.productId());
             validatePrice(item, product);
         }
 
         for (var item : cartItems) {
-            databaseProductService.decrementStock(item.productId(), item.amount());
+            productService.decrementStock(item.productId(), item.amount());
         }
 
         var orderItems = cartItems.stream()
