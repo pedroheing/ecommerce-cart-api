@@ -6,8 +6,12 @@ import com.pedroheing.shoppingcart.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Checkout")
+@SecurityRequirement(name = "bearer-token")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/checkout")

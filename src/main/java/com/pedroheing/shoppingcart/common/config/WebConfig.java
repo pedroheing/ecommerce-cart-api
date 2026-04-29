@@ -1,4 +1,4 @@
-package com.pedroheing.shoppingcart.config;
+package com.pedroheing.shoppingcart.common.config;
 
 import com.pedroheing.shoppingcart.auth.AuthInterceptor;
 import com.pedroheing.shoppingcart.auth.CurrentUserArgumentResolver;

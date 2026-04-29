@@ -1,4 +1,4 @@
-    package com.pedroheing.shoppingcart.config;
+    package com.pedroheing.shoppingcart.common.config;
 
     import org.springframework.context.annotation.Bean;
     import org.springframework.context.annotation.Configuration;

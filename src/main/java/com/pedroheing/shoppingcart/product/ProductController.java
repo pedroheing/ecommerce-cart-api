@@ -8,10 +8,12 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+@Tag(name = "Products")
 @RestController
 @RequestMapping("/v1/products")
 public class ProductController {
