@@ -5,6 +5,7 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.*;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,19 +23,27 @@ public class CartRepository {
     public void putItem(String userId, CartItem item) {
         var pk = this.buildPkKey(userId);
         var sk = this.buildSkKey(item.productId());
+        var expiresAt = Instant.now().plus(properties.ttl()).getEpochSecond();
         var updateRequest = UpdateItemRequest.builder()
                 .tableName(this.properties.tableName())
                 .key(Map.of(
                 "PK", AttributeValue.fromS(pk),
                 "SK", AttributeValue.fromS(sk)
                 ))
-                .updateExpression("SET productId = :productId, amount = :amount, #name = :name, price = :price")
+                .updateExpression(
+                        "SET productId = :productId, " +
+                        "amount = :amount, " +
+                        "#name = :name, " +
+                        "price = :price, " +
+                        "expiresAt = :expiresAt"
+                )
                 .expressionAttributeNames(Map.of("#name", "name"))
                 .expressionAttributeValues(Map.of(
                         ":productId", AttributeValue.fromS(item.productId()),
                         ":amount", AttributeValue.fromN(String.valueOf(item.amount())),
                         ":name", AttributeValue.fromS(item.name()),
-                        ":price", AttributeValue.fromN(item.price().toString())
+                        ":price", AttributeValue.fromN(item.price().toString()),
+                        ":expiresAt", AttributeValue.fromN(String.valueOf(expiresAt))
                 ))
                 .build();
         dynamoDbClient.updateItem(updateRequest);

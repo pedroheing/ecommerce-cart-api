@@ -8,3 +8,7 @@ awslocal dynamodb create-table \
     AttributeName=PK,KeyType=HASH \
     AttributeName=SK,KeyType=RANGE \
   --billing-mode PAY_PER_REQUEST
+
+awslocal dynamodb update-time-to-live \
+  --table-name shopping_cart \
+  --time-to-live-specification "Enabled=true, AttributeName=expiresAt"
