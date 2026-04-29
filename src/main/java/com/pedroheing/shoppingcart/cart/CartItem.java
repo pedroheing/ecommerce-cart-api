@@ -1,11 +1,13 @@
 package com.pedroheing.shoppingcart.cart;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 
 public record CartItem(
-        String productId,
-        String name,
-        BigDecimal price,
-        int amount
+        @Schema(example = "550e8400-e29b-41d4-a716-446655440000") String productId,
+        @Schema(example = "Wireless Headphones") String name,
+        @Schema(example = "149.99") BigDecimal price,
+        @Schema(example = "2") int amount
 ) {
     public CartItem {
         if (productId == null || productId.isBlank()) {

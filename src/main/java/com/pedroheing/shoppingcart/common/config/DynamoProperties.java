@@ -1,4 +1,4 @@
-package com.pedroheing.shoppingcart.config;
+package com.pedroheing.shoppingcart.common.config;
 
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.boot.context.properties.ConfigurationProperties;
