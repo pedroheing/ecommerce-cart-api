@@ -2,9 +2,9 @@
 
 [![Java](https://img.shields.io/badge/java-25-007396?style=flat&logo=openjdk&logoColor=white)](#)
 [![Spring Boot](https://img.shields.io/badge/spring%20boot-4-6DB33F?style=flat&logo=spring&logoColor=white)](#)
-[![PostgreSQL](https://img.shields.io/badge/postgres-17-316192.svg?style=flat&logo=postgresql&logoColor=white)](#)
+[![PostgreSQL](https://img.shields.io/badge/postgres-%23316192.svg?style=flat&logo=postgresql&logoColor=white)](#)
 [![DynamoDB](https://img.shields.io/badge/DynamoDB-4053D6?style=flat&logo=amazondynamodb&logoColor=white)](#)
-[![Redis](https://img.shields.io/badge/redis-8-DD0031.svg?style=flat&logo=redis&logoColor=white)](#)
+![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=flat&logo=redis&logoColor=white)
 [![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=flat&logo=docker&logoColor=white)](#)
 
 A shopping cart and checkout service built with Java 25 and Spring Boot 4. Uses DynamoDB for cart persistence with single-table design and TTL-based expiration, PostgreSQL for the authoritative product catalog and order history, and Redis as a cache layer for product reads. Features a price-snapshot model with checkout-time reconciliation, atomic stock decrement to prevent overselling, and a decorator-based cache strategy that lets each consumer choose between cached and authoritative reads.
