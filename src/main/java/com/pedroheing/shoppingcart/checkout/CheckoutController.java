@@ -16,7 +16,8 @@ public class CheckoutController {
     private final CheckoutService checkoutService;
 
     @PostMapping
-    public ResponseEntity<Order> checkout(@CurrentUser User user) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(checkoutService.checkout(user.getId()));
+    public ResponseEntity<OrderResponse> checkout(@CurrentUser User user) {
+        var order = checkoutService.checkout(user.getId());
+        return ResponseEntity.ok(OrderResponse.from(order));
     }
 }

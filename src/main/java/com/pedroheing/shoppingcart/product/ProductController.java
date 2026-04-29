@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/v1/products")
 public class ProductController {
@@ -22,7 +24,7 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<Product> create(@Valid @RequestBody CreateProductRequest request) {
-        var input = new CreateProductInput(request.name(), request.price());
+        var input = new CreateProductInput(request.name(), request.price(), request.stock());
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.create(input));
     }
 
@@ -31,9 +33,13 @@ public class ProductController {
         return ResponseEntity.ok(productService.findById(id));
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<Product> update(@PathVariable String id, @Valid @RequestBody UpdateProductRequest request) {
-        var input = new UpdateProductInput(request.name(), request.price());
+        var input = new UpdateProductInput(
+                Optional.ofNullable(request.name()),
+                Optional.ofNullable(request.price()),
+                Optional.ofNullable(request.stock())
+        );
         return ResponseEntity.ok(productService.update(id, input));
     }
 

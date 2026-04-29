@@ -17,6 +17,7 @@ public class DatabaseProductService implements ProductService {
     public Product create(CreateProductInput input) {
         Product product = Product.builder()
                 .name(input.name())
+                .stock(input.stock())
                 .price(input.price())
                 .build();
         return productRepository.save(product);
@@ -31,8 +32,9 @@ public class DatabaseProductService implements ProductService {
     public Product update(String id, UpdateProductInput input) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
-        product.changeName(input.name());
-        product.changePrice(input.price());
+        input.name().ifPresent(product::changeName);
+        input.price().ifPresent(product::changePrice);
+        input.stock().ifPresent(product::restock);
         return productRepository.save(product);
     }
 
@@ -44,7 +46,7 @@ public class DatabaseProductService implements ProductService {
         productRepository.deleteById(id);
     }
 
-    public void decrementStock(String productId, int amount) {
+    public Product decrementStock(String productId, int amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be positive");
         }
@@ -55,5 +57,6 @@ public class DatabaseProductService implements ProductService {
             }
             throw new InsufficientStockException(productId, amount);
         }
+        return this.findById(productId);
     }
 }
