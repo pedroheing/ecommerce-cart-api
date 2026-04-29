@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderItem {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
