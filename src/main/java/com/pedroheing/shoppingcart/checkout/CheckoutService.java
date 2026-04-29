@@ -20,7 +20,7 @@ public class CheckoutService {
 
     public CheckoutService(
             CartService cartService,
-            @Qualifier("databaseProductService") ProductService databaseProductService,
+            @Qualifier("writeThroughProductService") ProductService databaseProductService,
             OrderService orderService
     ) {
         this.cartService = cartService;

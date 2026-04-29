@@ -57,9 +57,8 @@ public class RedisProductService implements ProductService {
         redisTemplate.delete(this.buildKey(id));
     }
 
-    public Product decrementStock(String productId, int amount) {
-        var product = productService.decrementStock(productId, amount);
-        redisTemplate.opsForValue().set(this.buildKey(product.getId()), product, cacheProperties.ttl());
-        return product;
+    public void decrementStock(String productId, int amount) {
+        productService.decrementStock(productId, amount);
+        redisTemplate.delete(this.buildKey(productId));
     }
 }
