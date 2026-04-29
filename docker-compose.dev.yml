@@ -1,0 +1,41 @@
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: shopping_cart
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  localstack:
+    image: localstack/localstack:4.12
+    environment:
+      - SERVICES=dynamodb
+    ports:
+      - "4566:4566"
+    volumes:
+      - localstack_data:/var/lib/localstack
+      - ./localstack-init.sh:/etc/localstack/init/ready.d/init.sh
+
+  redis:
+    image: redis:8
+    restart: always
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis-insight:
+    image: redis/redisinsight:latest
+    ports:
+      - "5540:5540"
+
+volumes:
+  postgres_data:
+  localstack_data:
