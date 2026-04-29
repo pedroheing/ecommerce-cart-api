@@ -34,7 +34,7 @@ public class DatabaseProductService implements ProductService {
                 .orElseThrow(() -> new ProductNotFoundException(id));
         input.name().ifPresent(product::changeName);
         input.price().ifPresent(product::changePrice);
-        input.stock().ifPresent(product::restock);
+        input.stock().ifPresent(product::changeStock);
         return productRepository.save(product);
     }
 
