@@ -17,7 +17,7 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
-    public Order findById(UUID id) {
+    public Order findById(String id) {
         return orderRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Order not found: " + id));
     }

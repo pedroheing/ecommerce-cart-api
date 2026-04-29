@@ -1,6 +1,5 @@
-package com.pedroheing.shoppingcart.checkout;
+package com.pedroheing.shoppingcart.order;
 
-import com.pedroheing.shoppingcart.order.OrderItem;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.math.BigDecimal;

@@ -1,10 +1,9 @@
 package com.pedroheing.shoppingcart.checkout;
 
 import com.pedroheing.shoppingcart.auth.CurrentUser;
-import com.pedroheing.shoppingcart.order.Order;
+import com.pedroheing.shoppingcart.order.OrderResponse;
 import com.pedroheing.shoppingcart.user.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
