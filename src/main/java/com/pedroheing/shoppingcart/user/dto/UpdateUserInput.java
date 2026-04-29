@@ -1,3 +1,8 @@
 package com.pedroheing.shoppingcart.user.dto;
 
-public record UpdateUserInput(String name, String email) {}
+import java.util.Optional;
+
+public record UpdateUserInput(
+        Optional<String> name,
+        Optional<String> email
+) {}

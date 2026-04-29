@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/v1/users")
 @RequiredArgsConstructor
@@ -28,9 +30,12 @@ public class UserController {
         return ResponseEntity.ok(userService.findById(id));
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<User> update(@PathVariable String id, @Valid @RequestBody UpdateUserRequest request) {
-        var input = new UpdateUserInput(request.name(), request.email());
+        var input = new UpdateUserInput(
+                Optional.ofNullable(request.name()),
+                Optional.ofNullable(request.email())
+        );
         return ResponseEntity.ok(userService.update(id, input));
     }
 

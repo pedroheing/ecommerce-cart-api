@@ -23,14 +23,14 @@ public class User {
     @Column(nullable = false, unique = true)
     private String token;
 
-    public void setName(String name) {
+    public void changeName(String name) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name cannot be empty");
         }
         this.name = name;
     }
 
-    public void setEmail(String email) {
+    public void changeEmail(String email) {
         if (email == null || name.isEmpty()) {
             throw new IllegalArgumentException("E-mail cannot be empty");
         }
