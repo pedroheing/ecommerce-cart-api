@@ -40,8 +40,8 @@ public class UserService {
     public User update(String id, UpdateUserInput input) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User not found: " + id));
-        user.setName(input.name());
-        user.setEmail(input.email());
+        input.name().ifPresent(user::changeName);
+        input.email().ifPresent(user::changeEmail);
         return userRepository.save(user);
     }
 
