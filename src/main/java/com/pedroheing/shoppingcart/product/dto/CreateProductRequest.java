@@ -4,11 +4,13 @@ import com.pedroheing.shoppingcart.common.serializer.BigDecimalStringDeserialize
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import tools.jackson.databind.annotation.JsonDeserialize;
 
 import java.math.BigDecimal;
 
 public record CreateProductRequest(
         @NotBlank String name,
-        @NotNull @Digits(integer = 15, fraction = 4) @JsonDeserialize(using = BigDecimalStringDeserializer.class) BigDecimal price
+        @NotNull @Digits(integer = 15, fraction = 4) @JsonDeserialize(using = BigDecimalStringDeserializer.class) BigDecimal price,
+        @Positive @NotNull Integer stock
 ) {}

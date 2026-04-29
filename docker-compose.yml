@@ -11,7 +11,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   localstack:
-    image: localstack/localstack:latest
+    image: localstack/localstack:4.12
     environment:
       - SERVICES=dynamodb
     ports:
@@ -19,9 +19,12 @@ services:
     volumes:
       - localstack_data:/var/lib/localstack
 
+
   redis:
     image: redis:8
     restart: always
+    ports:
+      - "6379:6379"
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s

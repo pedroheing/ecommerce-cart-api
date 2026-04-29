@@ -8,5 +8,5 @@ public interface ProductService {
     Product findById(String id);
     Product update(String id, UpdateProductInput input);
     void delete(String id);
-    void decrementStock(String productId, int amount);
+    Product decrementStock(String productId, int amount);
 }

@@ -28,9 +28,10 @@ public class CartRepository {
                 "PK", AttributeValue.fromS(pk),
                 "SK", AttributeValue.fromS(sk)
                 ))
-                .updateExpression("SET amount = :amount, #name = :name, price = :price")
+                .updateExpression("SET productId = :productId, amount = :amount, #name = :name, price = :price")
                 .expressionAttributeNames(Map.of("#name", "name"))
                 .expressionAttributeValues(Map.of(
+                        ":productId", AttributeValue.fromS(item.productId()),
                         ":amount", AttributeValue.fromN(String.valueOf(item.amount())),
                         ":name", AttributeValue.fromS(item.name()),
                         ":price", AttributeValue.fromN(item.price().toString())
@@ -114,7 +115,7 @@ public class CartRepository {
 
     private CartItem toCartItem(Map<String, AttributeValue> item) {
         return new CartItem(
-            item.get("SK").s().replace("prod#", ""),
+            item.get("productId").s(),
             item.get("name").s(),
             new BigDecimal(item.get("price").n()),
             Integer.parseInt(item.get("amount").n())

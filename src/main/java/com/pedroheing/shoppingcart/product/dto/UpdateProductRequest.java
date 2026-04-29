@@ -9,6 +9,9 @@ import tools.jackson.databind.annotation.JsonDeserialize;
 import java.math.BigDecimal;
 
 public record UpdateProductRequest(
-        @NotBlank String name,
-        @NotNull @Digits(integer = 15, fraction = 4) @JsonDeserialize(using = BigDecimalStringDeserializer.class) BigDecimal price
+        String name,
+        @Digits(integer = 15, fraction = 4)
+        @JsonDeserialize(using = BigDecimalStringDeserializer.class)
+        BigDecimal price,
+        Integer stock
 ) {}

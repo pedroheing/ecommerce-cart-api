@@ -2,10 +2,15 @@ spring:
   application:
     name: shopping-cart
 
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
   datasource:
-    url: jdbc:postgresql://localhost:5432/shopping_cart
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:shopping_cart}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -30,8 +35,8 @@ shoppingcart:
     token:
       ttl: 24h
   dynamo:
-    endpoint: http://localhost:4566
     region: us-east-1
+    endpoint: ${DYNAMO_ENDPOINT:http://localhost:4566}
     access-key: test
     secret-key: test
 
