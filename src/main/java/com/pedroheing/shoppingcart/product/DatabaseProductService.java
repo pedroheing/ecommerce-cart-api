@@ -46,7 +46,7 @@ public class DatabaseProductService implements ProductService {
         productRepository.deleteById(id);
     }
 
-    public Product decrementStock(String productId, int amount) {
+    public void decrementStock(String productId, int amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be positive");
         }
@@ -57,6 +57,5 @@ public class DatabaseProductService implements ProductService {
             }
             throw new InsufficientStockException(productId, amount);
         }
-        return this.findById(productId);
     }
 }

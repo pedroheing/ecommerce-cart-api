@@ -18,7 +18,7 @@ public class ProductController {
 
     private final ProductService productService;
 
-    public ProductController(@Qualifier("cachedProductService")  ProductService productService) {
+    public ProductController(@Qualifier("writeThroughProductService")  ProductService productService) {
         this.productService = productService;
     }
 
