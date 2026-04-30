@@ -18,11 +18,6 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<OrderResponse> findById(@PathVariable String id) {
-        return ResponseEntity.ok(OrderResponse.from(orderService.findById(id)));
-    }
-
     @SecurityRequirement(name = "bearer-token")
     @GetMapping
     public ResponseEntity<List<OrderResponse>> listByUser(@CurrentUser User user) {
