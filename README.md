@@ -270,13 +270,14 @@ docker compose -f docker-compose.dev.yml up
 
 ## Access Points
 
-| Service | URL | Notes |
-|---|---|---|
-| API | `http://localhost:8080/v1` | Base path |
-| Swagger UI | `http://localhost:8080/swagger-ui.html` | Interactive API docs |
-| PostgreSQL | `localhost:5432` | User: `postgres` / Pass: `postgres` (dev only) |
-| Redis Insight | `http://localhost:5540` | Available in dev compose |
-| LocalStack | `http://localhost:4566` | DynamoDB emulator |
+| Service | URL | Notes                                 |
+|---|---|---------------------------------------|
+| API | `http://localhost:8080/v1` | -                                     |
+| Swagger UI | `http://localhost:8080/swagger-ui.html` | -                                     |
+| PostgreSQL | `localhost:5432` | User: `postgres` / Pass: `postgres` / Host: `postgres`  |
+| pgAdmin | `http://localhost:5050` | User: `admin@admin.com` / Pass: `admin` |
+| Redis Insight | `http://localhost:5540` | -                                     |
+| LocalStack | `http://localhost:4566` | -                                     |
 
 ## API Documentation
 
@@ -302,7 +303,6 @@ Full schema is available via Swagger UI. The main endpoints:
 - `POST /v1/checkout`: validate prices, decrement stock atomically, create order, clear cart
 
 **Orders** (requires `Authorization: Bearer <token>`)
-- `GET /v1/orders/{id}`: read a single order
 - `GET /v1/orders`: list orders for the authenticated user
 
 ## Run Tests

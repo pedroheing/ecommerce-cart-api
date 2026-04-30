@@ -28,7 +28,7 @@ public class CartController {
         return ResponseEntity.status(HttpStatus.CREATED).body(cartService.putItem(input));
     }
 
-    @DeleteMapping("/product/{productId}")
+    @DeleteMapping("/items/{productId}")
     public ResponseEntity<Void> removeFromCart(@CurrentUser User user, @PathVariable String productId) {
         cartService.removeItem(user.getId(), productId);
         return ResponseEntity.noContent().build();
