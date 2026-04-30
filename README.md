@@ -49,8 +49,6 @@ price:      <decimal>     (snapshot)
 expiresAt:  <epoch_seconds>
 ```
 
-The `productId` is duplicated as a top-level attribute rather than parsed from the `SK` prefix. Reads stay clean, and a future GSI on `productId` becomes possible without restructuring.
-
 <details>
 <summary>Add-to-Cart Sequence Diagram</summary>
 
@@ -60,7 +58,7 @@ sequenceDiagram
   participant Client
   participant API as CartController
   participant CartSvc as CartService
-  participant ProdReader as ProductReader (cached)
+  participant ProdReader as ProductService
   participant Cache as Redis
   participant DB as PostgreSQL
   participant Cart as DynamoDB
@@ -105,7 +103,7 @@ flowchart TD
   A[POST /v1/checkout] --> B[Read cart items from DynamoDB]
   B --> C{Cart empty?}
   C -- Yes --> EMPTY[400 EMPTY_CART]
-  C -- No --> D[For each item: read authoritative Product from PostgreSQL]
+  C -- No --> D[For each item: read Product from PostgreSQL]
 
   D --> E{Price matches snapshot?}
   E -- No --> PRICE[409 PRICE_CHANGED]
